@@ -5,6 +5,7 @@
 [![ADB: 1.0.41](https://img.shields.io/badge/ADB-1.0.41-brightgreen "1.0.41")](https://4pda.to/forum/index.php?showtopic=383300)
 
 Небольшой скрипт для быстрого получения maFile из андроида
+Проверено на андройд 9
 
 ### Подготовка к работе
 
