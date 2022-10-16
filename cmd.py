@@ -8,7 +8,7 @@ import json
 name_backup_file = "val.ba"
 name_tar_file = "valve.tar"
 dir_ext_tarfile = "tar_file"
-dir_mafiles = "maFiles"
+dir_mafiles = "maFiles/"
 
 path_uuid = f"{dir_ext_tarfile}/apps/com.valvesoftware.android.steam.community/sp/steam.uuid.xml"
 path_steam_guard = f"{dir_ext_tarfile}/apps/com.valvesoftware.android.steam.community/f/"
@@ -30,6 +30,10 @@ def check_dependency():
     if subprocess.call('java --version', creationflags=0x08000000):
         print("Java not found")
         exit()
+
+    if not os.path.exists(dir_mafiles):
+        os.mkdir(dir_mafiles)
+
     command()
 
 
@@ -77,9 +81,7 @@ def parse_files():
         else:
             steam_guard_file = steam_guard_files[0]
 
-        if not os.path.exists(dir_mafiles+"/"):
-            os.mkdir(dir_mafiles)
-        name_mafile = f"{dir_mafiles}/{steam_guard_file.split('-')[1]}.maFile"
+        name_mafile = f"{dir_mafiles}{steam_guard_file.split('-')[1]}.maFile"
 
         if not os.path.exists(name_mafile):
             open_steam_guard_file(steam_guard_file)
