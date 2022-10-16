@@ -4,7 +4,8 @@
 [![Java: 18](https://img.shields.io/badge/java-18.0.1.1-green "java 18")](https://www.oracle.com/java/technologies/javase/jdk18-archive-downloads.html)
 [![ADB: 1.0.41](https://img.shields.io/badge/ADB-1.0.41-brightgreen "1.0.41")](https://4pda.to/forum/index.php?showtopic=383300)
 
-Небольшой скрипт для быстрого получения maFile из андроида
+Небольшой скрипт для быстрого получения maFile из андроида   
+Проверено на андройд 9
 
 ### Подготовка к работе
 
