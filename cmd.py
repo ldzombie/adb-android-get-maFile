@@ -38,6 +38,9 @@ def command():
     os.system(cmd_devices)
     if not os.path.exists(name_backup_file):
         os.system(cmd_get_backup)
+    if os.path.getsize(name_backup_file) == 0:
+        os.remove(name_backup_file)
+        exit()
 
     if not os.path.exists(name_tar_file) and os.path.exists(name_backup_file):
         os.system(cmd_ba_to_tar)
@@ -74,6 +77,8 @@ def parse_files():
         else:
             steam_guard_file = steam_guard_files[0]
 
+        if not os.path.exists(dir_mafiles+"/"):
+            os.mkdir(dir_mafiles)
         name_mafile = f"{dir_mafiles}/{steam_guard_file.split('-')[1]}.maFile"
 
         if not os.path.exists(name_mafile):
@@ -122,13 +127,14 @@ def save_mafile():
     try:
         with open(name_mafile, "w") as file:
             file.write(str(steam_guard))
-            print(f"File {name_mafile} create success!")
+        print(f"File {name_mafile.split('/')[1]} create success!")
+        clean_files()
     except Exception as e:
         print(f"File create FAIL!\n {e}")
 
 
 def clean_files():
-    imp = input("Delete files created during work?(y/n)")
+    imp = input("Delete files created during work?(y/n): ")
     match imp:
         case "y":
             if os.path.exists(dir_ext_tarfile):
@@ -145,7 +151,7 @@ def main():
     check_dependency()
     extract_file()
     parse_files()
-    clean_files()
+
 
 
 if __name__ == "__main__":
