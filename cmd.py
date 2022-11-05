@@ -24,30 +24,33 @@ name_mafile = None
 
 # Проверка наличия java и adb
 def check_dependency():
-    if subprocess.call('adb version', creationflags=0x08000000):
-        print("Adb not found")
-        exit()
-    if subprocess.call('java --version', creationflags=0x08000000):
-        print("Java not found")
-        exit()
+    try:
+        if subprocess.call('adb version', creationflags=0x08000000):
+            raise Exception("Adb not found")
+        if subprocess.call('java --version', creationflags=0x08000000):
+           raise Exception("Java not found")
 
-    if not os.path.exists(dir_mafiles):
-        os.mkdir(dir_mafiles)
-
-    command()
+        os.system(cmd_devices)
+        command()
+    except Exception as e:
+        print(e)
 
 
 # выполнение команд
 def command():
-    os.system(cmd_devices)
-    if not os.path.exists(name_backup_file):
-        os.system(cmd_get_backup)
-    if os.path.getsize(name_backup_file) == 0:
-        os.remove(name_backup_file)
-        exit()
+    try:
+        cleans()
+    
+        if not os.path.exists(name_backup_file):
+            os.system(cmd_get_backup)
 
-    if not os.path.exists(name_tar_file) and os.path.exists(name_backup_file):
-        os.system(cmd_ba_to_tar)
+        if os.path.exists(name_backup_file):
+            if not os.path.exists(name_tar_file):
+                os.system(cmd_ba_to_tar)
+        else:
+            raise Exception(f"File backup is missing")
+    except Exception as e:
+        print(e)
 
 
 def extract_file():
@@ -80,6 +83,9 @@ def parse_files():
                 parse_files()
         else:
             steam_guard_file = steam_guard_files[0]
+
+        if not os.path.exists(dir_mafiles):
+            os.mkdir(dir_mafiles)
 
         name_mafile = f"{dir_mafiles}{steam_guard_file.split('-')[1]}.maFile"
 
@@ -135,16 +141,20 @@ def save_mafile():
         print(f"File create FAIL!\n {e}")
 
 
+def cleans():
+    if os.path.exists(dir_ext_tarfile):
+        shutil.rmtree(dir_ext_tarfile)
+    if os.path.exists(name_backup_file):
+        os.remove(name_backup_file)
+    if os.path.exists(name_tar_file):
+        os.remove(name_tar_file)
+
+
 def clean_files():
     imp = input("Delete files created during work?(y/n): ")
     match imp:
         case "y":
-            if os.path.exists(dir_ext_tarfile):
-                shutil.rmtree(dir_ext_tarfile)
-            if os.path.exists(name_backup_file):
-                os.remove(name_backup_file)
-            if os.path.exists(name_tar_file):
-                os.remove(name_tar_file)
+            cleans()
         case _:
             print("END")
 
